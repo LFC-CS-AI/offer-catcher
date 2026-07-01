@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offer 捕手 - 计算机学生求职匹配智能体</title>
+    <link rel="stylesheet" href="styles.css?v=20260701-job-import2" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark"><i data-lucide="radar"></i></span>
+          <div>
+            <h1>Offer 捕手</h1>
+            <p>计算机求职匹配智能体</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span class="sync-badge"><i data-lucide="activity"></i><span id="runState">已就绪</span></span>
+          <button class="solid-btn" id="exportPlan" type="button">
+            <i data-lucide="download"></i><span>导出报告</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="profile-panel" aria-label="学生档案">
+          <figure class="visual-panel">
+            <img src="assets/offer-catcher-hero.png" alt="学生使用智能求职匹配仪表盘" />
+            <figcaption class="stock-board">
+              <span>每日互联网公司股价前十排行榜</span>
+              <ol id="stockList" aria-label="互联网公司股价前十"></ol>
+              <small id="stockUpdated">行情快照加载中</small>
+            </figcaption>
+          </figure>
+
+          <form class="profile-form" id="profileForm">
+            <div class="section-title">
+              <i data-lucide="user-round"></i>
+              <h2>学生画像</h2>
+            </div>
+
+            <label class="field">
+              <span>姓名 / 昵称</span>
+              <input id="studentName" type="text" value="陈亦然" />
+            </label>
+
+            <div class="two-col">
+              <label class="field">
+                <span>专业</span>
+                <select id="major">
+                  <option>计算机科学与技术</option>
+                  <option>软件工程</option>
+                  <option>网络工程</option>
+                  <option>信息安全</option>
+                  <option>物联网工程</option>
+                  <option>数字媒体技术</option>
+                  <option>智能科学与技术</option>
+                  <option>空间信息与数字技术</option>
+                  <option>电子与计算机工程</option>
+                  <option>数据科学与大数据技术</option>
+                  <option>网络空间安全</option>
+                  <option>新媒体技术</option>
+                  <option>电影制作</option>
+                  <option>保密技术</option>
+                  <option>服务科学与工程</option>
+                  <option>虚拟现实技术</option>
+                  <option>区块链工程</option>
+                  <option>密码科学与技术</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>毕业时间</span>
+                <select id="gradYear">
+                  <option>2026 届</option>
+                  <option>2027 届</option>
+                  <option>2028 届</option>
+                  <option>2029 届</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="field">
+              <span>求职目标</span>
+              <select id="targetRole">
+                <option>前端</option>
+                <option>后端</option>
+                <option>全栈</option>
+                <option>算法</option>
+                <option>测试</option>
+                <option>运维</option>
+                <option>产品经理</option>
+              </select>
+            </label>
+
+            <div class="multi-picker">
+              <div class="field-label">
+                <span>偏好城市</span>
+                <small>可多选</small>
+              </div>
+              <input class="city-search" id="citySearch" type="search" placeholder="搜索城市，如：北京、成都、苏州" />
+              <div class="selected-row" id="selectedCities" aria-label="已选择城市"></div>
+              <button class="ghost-btn city-toggle" id="cityToggle" type="button">
+                <i data-lucide="chevrons-down"></i><span>展开城市列表</span>
+              </button>
+              <div class="option-grid city-options" id="cityOptions" aria-label="城市列表"></div>
+            </div>
+
+            <div class="multi-picker">
+              <div class="field-label">
+                <span>公司规模</span>
+                <small>可多选</small>
+              </div>
+              <div class="chips" id="scaleChips" aria-label="公司规模"></div>
+            </div>
+
+            <div class="chip-block">
+              <span>技能标签</span>
+              <div class="chips" id="skillChips" aria-label="技能标签"></div>
+            </div>
+
+            <label class="field resume-field">
+              <span>简历内容</span>
+              <textarea id="resumeText" spellcheck="false">计算机科学本科，参与校园二手交易平台和课程管理后台开发。熟悉 JavaScript、TypeScript、React、Vue、HTML、CSS，了解组件化开发、路由、状态管理和接口联调。使用 Node.js 和 Express 编写过 RESTful API，接触 MySQL、Redis、Git、Docker。曾带领 4 人小组完成需求拆解、页面开发、上线测试和性能优化，项目累计 1200 名同学使用。</textarea>
+            </label>
+
+            <div class="file-row">
+              <label class="file-btn" id="resumeFileLabel">
+                <i data-lucide="file-up"></i>
+                <span>导入简历</span>
+                <input id="resumeFile" type="file" accept=".txt,.md,.pdf,.doc,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword" />
+              </label>
+              <button class="ghost-btn full" id="analyzeNow" type="button">
+                <i data-lucide="scan-search"></i><span>重新匹配</span>
+              </button>
+            </div>
+            <p class="file-hint" id="fileHint">支持 PDF、Word docx/doc、txt、md。修改简历内容后点击重新匹配即可重新计算。</p>
+          </form>
+        </aside>
+
+        <main class="result-panel">
+          <section class="agent-strip" aria-label="智能体流程">
+            <div class="agent-title">
+              <i data-lucide="bot"></i>
+              <div>
+                <h2>匹配运行台</h2>
+                <p id="agentSummary">正在读取学生画像、招聘需求和简历内容。</p>
+              </div>
+            </div>
+            <div class="agent-steps" id="agentSteps"></div>
+          </section>
+
+          <section class="summary-grid" aria-label="匹配摘要">
+            <div class="metric-tile">
+              <span>最高匹配</span>
+              <strong id="topScore">0%</strong>
+              <small id="topJob">等待分析</small>
+            </div>
+            <div class="metric-tile">
+              <span>可优先投递</span>
+              <strong id="strongCount">0</strong>
+              <small>通过率 75% 以上</small>
+            </div>
+            <div class="metric-tile">
+              <span>必须满足项</span>
+              <strong id="mustCoverage">0%</strong>
+              <small>来自岗位硬性要求</small>
+            </div>
+            <div class="metric-tile">
+              <span>加分项</span>
+              <strong id="bonusCoverage">0%</strong>
+              <small>来自岗位优先条件</small>
+            </div>
+          </section>
+
+          <section class="content-grid">
+            <div class="job-column">
+              <div class="section-title compact">
+                <i data-lucide="briefcase-business"></i>
+                <h2>岗位推荐</h2>
+              </div>
+              <div class="filter-row" role="group" aria-label="岗位筛选">
+                <button class="filter active" data-filter="all" type="button">全部</button>
+                <button class="filter" data-filter="实习" type="button">实习</button>
+                <button class="filter" data-filter="校招" type="button">校招</button>
+                <button class="filter" data-filter="社招" type="button">社招</button>
+              </div>
+              <div class="sync-note" id="jobSyncNote"></div>
+              <details class="job-import" id="jobImportPanel">
+                <summary>
+                  <span><i data-lucide="cloud-download"></i>更新岗位库</span>
+                  <small id="importCount">0 个导入岗位</small>
+                </summary>
+                <textarea id="jobImportText" spellcheck="false" placeholder="粘贴岗位名称、公司、城市、薪资、岗位职责、任职要求、加分项"></textarea>
+                <div class="import-actions">
+                  <button class="solid-btn tiny" id="importJobs" type="button">
+                    <i data-lucide="database-zap"></i><span>导入岗位</span>
+                  </button>
+                  <button class="ghost-btn tiny" id="clearImportedJobs" type="button">
+                    <i data-lucide="trash-2"></i><span>清空导入</span>
+                  </button>
+                </div>
+                <p id="jobImportHint">支持从官网、BOSS、牛客、拉勾复制的岗位详情文本。</p>
+              </details>
+              <div class="job-list" id="jobList"></div>
+            </div>
+
+            <div class="detail-column">
+              <section class="detail-hero" aria-label="选中岗位">
+                <div>
+                  <span class="eyebrow" id="selectedType">岗位</span>
+                  <h2 id="selectedTitle">选择一个岗位查看诊断</h2>
+                  <p id="selectedCompany">系统会对比简历内容与岗位招聘需求。</p>
+                </div>
+                <div class="score-ring" aria-label="初筛通过率">
+                  <strong id="selectedScore">0</strong>
+                  <span>pass</span>
+                </div>
+              </section>
+
+              <section class="diagnosis-grid" aria-label="岗位诊断">
+                <div class="diagnosis-panel">
+                  <div class="panel-head">
+                    <i data-lucide="list-checks"></i>
+                    <h3>匹配项</h3>
+                  </div>
+                  <ul class="evidence-list" id="evidenceList"></ul>
+                </div>
+                <div class="diagnosis-panel">
+                  <div class="panel-head">
+                    <i data-lucide="triangle-alert"></i>
+                    <h3>缺失部分</h3>
+                  </div>
+                  <ul class="evidence-list warning" id="gapList"></ul>
+                </div>
+              </section>
+
+              <section class="score-breakdown" aria-label="初筛通过率">
+                <div class="panel-head">
+                  <i data-lucide="sliders-horizontal"></i>
+                  <h3>初筛通过率</h3>
+                </div>
+                <div class="bars" id="scoreBars"></div>
+              </section>
+
+              <section class="resume-lab" aria-label="简历优化建议">
+                <div class="panel-head split">
+                  <span>
+                    <i data-lucide="wand-sparkles"></i>
+                    <h3>简历优化建议</h3>
+                  </span>
+                  <button class="ghost-btn tiny" id="copyBullets" type="button">
+                    <i data-lucide="copy"></i><span>复制</span>
+                  </button>
+                </div>
+                <div class="keyword-row" id="keywordRow"></div>
+                <ol class="rewrite-list" id="rewriteList"></ol>
+              </section>
+            </div>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="assets/vendor/pdf.min.js"></script>
+    <script src="assets/vendor/mammoth.browser.min.js"></script>
+    <script src="app.js?v=20260701-job-import2"></script>
+  </body>
+</html>
