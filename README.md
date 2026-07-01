@@ -10,16 +10,6 @@ python -m http.server 8080
 
 然后访问 `http://localhost:8080`。
 
-## 交付物
-
-- Demo 页面：`index.html`
-- 样式：`styles.css`
-- 匹配逻辑：`app.js`
-- 主视觉资产：`assets/offer-catcher-hero.png`
-- 本地解析库：`assets/vendor/pdf.min.js`、`assets/vendor/mammoth.browser.min.js`
-- 方案说明：`docs/方案说明.md`
-- PDF 方案说明：`output/pdf/offer-catcher-solution.pdf`
-
 ## 当前功能
 
 - 求职目标：前端、后端、全栈、算法、测试、运维、产品经理
